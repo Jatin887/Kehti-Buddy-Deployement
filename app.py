@@ -108,7 +108,7 @@ port = os.environ.get('PORT', 80)
 
 @ app.route('/')
 def home():
-    title = 'Harvestify - Home'
+    title = 'KehtiBuddy - Home'
     return render_template('index.html', title=title)
 
 # render crop recommendation form page
@@ -116,7 +116,7 @@ def home():
 
 @ app.route('/crop-recommend')
 def crop_recommend():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'KehtiBuddy - Crop Recommendation'
     return render_template('crop.html', title=title)
 
 # render fertilizer recommendation form page
@@ -124,7 +124,7 @@ def crop_recommend():
 
 @ app.route('/fertilizer')
 def fertilizer_recommendation():
-    title = 'Harvestify - Fertilizer Suggestion'
+    title = 'KehtiBuddy - Fertilizer Suggestion'
 
     return render_template('fertilizer.html', title=title)
 
@@ -140,7 +140,7 @@ def fertilizer_recommendation():
 
 @ app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'KehtiBuddy - Crop Recommendation'
 
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
@@ -159,8 +159,8 @@ def crop_prediction():
             my_prediction = crop_recommendation_model.predict(data)
             final_prediction = my_prediction[0]
 
-            # return render_template('crop-result.html', prediction=final_prediction, title=title)
-            return jsonify({"final_prediction": final_prediction})
+            return render_template('crop-result.html', prediction=final_prediction, title=title)
+            # return jsonify({"final_prediction": final_prediction})
 
         else:
 
@@ -171,7 +171,7 @@ def crop_prediction():
 
 @ app.route('/fertilizer-predict', methods=['POST'])
 def fert_recommend():
-    title = 'Harvestify - Fertilizer Suggestion'
+    title = 'KehtiBuddy - Fertilizer Suggestion'
 
     crop_name = str(request.form['cropname'])
     N = int(request.form['nitrogen'])
@@ -215,7 +215,7 @@ def fert_recommend():
 
 @app.route('/disease-predict', methods=['GET', 'POST'])
 def disease_prediction():
-    title = 'Harvestify - Disease Detection'
+    title = 'KehtiBuddy - Disease Detection'
 
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -237,4 +237,4 @@ def disease_prediction():
 
 # ===============================================================================================
 if __name__ == '__main__':
-    app.run(debug=False, host="0.0.0.0",port=port)
+     app.run(debug=False)
