@@ -9,6 +9,7 @@ import config
 import pickle
 import nltk
 from nltk.corpus import stopwords
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
 import io
@@ -21,7 +22,7 @@ import os
 import re
 nltk.download('punkt')
 nltk.download('stopwords')
-# from keras.models import load_model
+from keras.models import load_model
 
 # ==============================================================================================
 
@@ -53,15 +54,37 @@ def clean_sentence(sentence: str) -> list:
     # stemmer = PorterStemmer()
     # sentence = [stemmer.stem(word) for word in sentence]
     return sentence
+# or 175 if we took all review sizes into consideration
+x_train = open('x_train_1.txt','r')
+x_train = eval(x_train.read())
+vocab = set()
+for sentence in x_train:
+    for word in sentence:
+        vocab.add(word)
 
+vocab.add('')
+print("Vocab size:", len(vocab))
+
+word2id = {word:id for  id, word in enumerate(vocab)}
+def encode_sentence(old_sentence):
+    encoded_sentence = []
+    dummy = word2id['']
+    for word in old_sentence:
+        try:
+            encoded_sentence.append(word2id[word])
+        except KeyError:
+            encoded_sentence.append(dummy) # the none char
+    return encoded_sentence
+MAX_SEQ_LEN = 125
+dummy = word2id['']
 def lstm_predict(sentence:str):
     sentence = clean_sentence(sentence)
     # Encode sentence
-    lstm_model_path = 'models/lstm.pkl'
-    lstm_model = pickle.load(
-    open(lstm_model_path, 'rb'))
+    # lstm_model_path = 'models/lstm.pkl'
+    # lstm_model = pickle.load(
+    # open(lstm_model_path, 'rb'))
 
-    # lstm_model = load_model('models/lstm_model.h5')
+    lstm_model = load_model('models/lstm_model.h5')
     ready_sentence = encode_sentence(sentence)
     # Padding sentence
     ready_sentence = pad_sequences(sequences = [ready_sentence], 
@@ -105,7 +128,7 @@ def home():
     title = 'Sentiment Analysis'
     return render_template('predection.html', title=title)
 
-@ app.route('/crop-predict', methods=['POST'])
+@ app.route('/sentiment-predict', methods=['POST'])
 def sentiment_prediction():
     title = 'Sentiment Analysis'
 

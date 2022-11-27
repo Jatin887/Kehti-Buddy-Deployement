@@ -24,13 +24,14 @@
 >
   <form method="POST" action="{{ url_for('sentiment_prediction') }}">
     <div class="form-group">
-      <label for="Enter the sentence " style="font-size: 17px"><b>sentence</b></label>
+      <label for="Enter the sentence " style="font-size: 17px"><b>Enter The Sentence<b></label>
       <input
+        width="50"
         type="text"
         class="form-control"
         id="sentence"
         name="sentence"
-        placeholder="Enter the sentence (example:the movie was really good )"
+        placeholder="(example:the movie was really good )"
         style="font-weight: bold"
         required
       />
